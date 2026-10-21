@@ -248,17 +248,4 @@ python -m newsclf.top_words
 pytest
 ```
 *All 45 unit and integration tests execute in **under 4 seconds** on standard laptop hardware.*
-
----
-
-## 🗣️ Viva & Presentation Talking Points
-
-1. **Why TF-IDF + Logistic Regression over a Transformer?**
-   - *Accuracy vs Cost*: Logistic Regression achieves **91.64%** accuracy at **~0.05 ms latency** on CPU, whereas DistilBERT achieves ~93.8% at ~12.5 ms (~250x slower and requires high-end server GPU infrastructure).
-   - *Interpretability*: Linear models permit exact mathematical decomposition of feature importance ($W \cdot X$) without approximations.
-2. **Why do Business and Sci/Tech overlap the most?**
-   - High degree of shared entities: Tech corporations are also traded companies subject to quarterly reports, antitrust lawsuits, and stock movements.
-3. **How do you know confidence scores are trustworthy?**
-   - We verified calibration empirically: Expected Calibration Error is low (**ECE = 0.0577**), matching predicted probabilities with empirical accuracy.
-4. **How does the system handle inputs from outside the 4 classes?**
-   - Rather than predicting an unconstrained 5th class, we use the calibrated uncertainty threshold ($\tau = 0.60$). When tested on out-of-domain lifestyle and food headlines, **80% of samples naturally fell below the threshold**, triggering the uncertainty warning banner.
+'''
