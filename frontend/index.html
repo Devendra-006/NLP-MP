@@ -325,27 +325,89 @@
     <!-- TAB 3: EVALUATION & METRICS                -->
     <!-- ========================================== -->
     <section class="tab-panel hidden" id="tabEvaluation" role="tabpanel">
+      
+      <!-- Evaluation Controls Bar: Source Selector + Plain English Toggle -->
+      <div class="eval-controls-bar">
+        <div class="eval-source-tabs" role="tablist">
+          <button type="button" class="eval-source-btn active" id="btnSourceBenchmark" data-source="benchmark">
+            AG News Benchmark (7,600)
+          </button>
+          <button type="button" class="eval-source-btn" id="btnSourceBatch" data-source="batch">
+            Batch Input Results <span class="badge-count hidden" id="evalBatchCount">0</span>
+          </button>
+          <button type="button" class="eval-source-btn" id="btnSourceLive" data-source="live">
+            Live Headline Tester
+          </button>
+        </div>
+
+        <div class="eval-mode-toggle">
+          <label class="toggle-label" for="togglePlainEnglish" title="Toggle between friendly plain English explanations and formal statistical metrics">
+            <input type="checkbox" id="togglePlainEnglish" class="toggle-checkbox" checked>
+            <span class="toggle-switch"></span>
+            <span class="toggle-text" id="toggleText">Easy English Mode</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Live Headline Evaluator (Active / Visible when testing or in Live Mode) -->
+      <div class="live-eval-box" id="liveEvalBox">
+        <div class="live-eval-header">
+          <div>
+            <h3 class="live-eval-title">Live Headline Evaluator</h3>
+            <p class="live-eval-sub">Type or change any news headline below. The metrics, prediction decision, and matrix will update live with your input.</p>
+          </div>
+          <div class="live-eval-presets">
+            <span class="presets-label">Quick Test:</span>
+            <button type="button" class="chip-sm" data-text="Messi scores twice in Champions League final as team secures historic treble victory">Sports</button>
+            <button type="button" class="chip-sm" data-text="Federal Reserve signals interest rate adjustments following quarterly corporate earnings surge">Business</button>
+            <button type="button" class="chip-sm" data-text="NASA James Webb telescope reveals high-resolution spectroscopic data of distant exoplanet">Sci/Tech</button>
+            <button type="button" class="chip-sm" data-text="United Nations security council diplomats convene in Geneva for peace negotiations">World</button>
+            <button type="button" class="chip-sm" data-text="Billionaire completes four billion dollar leveraged buyout of premier football club">Edge: Sports+Business</button>
+          </div>
+        </div>
+
+        <div class="live-eval-input-row">
+          <input type="text" id="liveHeadlineInput" class="form-input" placeholder="Type a headline to test live..." value="Messi scores twice in Champions League final as team secures historic treble victory">
+          <div class="live-eval-result-badge" id="liveEvalResultBadge">
+            <span class="live-badge-label">Predicted:</span>
+            <strong id="livePredictedCategory" class="pill pill-sports">Sports</strong>
+            <span class="live-badge-conf" id="livePredictedConfidence">96.4% confident</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Batch Mode Context Banner (visible when Batch Mode is selected) -->
+      <div class="batch-eval-banner hidden" id="batchEvalBanner">
+        <div class="batch-eval-info" id="batchEvalInfo">
+          <strong>Batch Input Evaluation:</strong>
+          <span id="batchEvalStatusText">No batch data loaded yet. Upload a CSV in the Batch Prediction tab or load a sample below.</span>
+        </div>
+        <div class="batch-eval-actions">
+          <button type="button" class="btn btn-sm btn-outline" id="btnLoadDemoInEval">Load Demo Labeled CSV (20 samples)</button>
+        </div>
+      </div>
+
       <!-- Top Metrics Overview -->
       <div class="metrics-grid" id="metricsCardsGrid">
         <div class="metric-card">
-          <div class="metric-label">Test Accuracy</div>
+          <div class="metric-label" id="lblMetric1">Overall Accuracy</div>
           <div class="metric-value accent-blue" id="valAccuracy">91.64%</div>
-          <div class="metric-sub">Official AG News Test Set</div>
+          <div class="metric-sub" id="subMetric1">92 out of 100 articles classified correctly</div>
         </div>
         <div class="metric-card">
-          <div class="metric-label">Macro F1-Score</div>
+          <div class="metric-label" id="lblMetric2">Balance Score (F1)</div>
           <div class="metric-value accent-green" id="valMacroF1">0.9163</div>
-          <div class="metric-sub">Harmonic Mean of Precision &amp; Recall</div>
+          <div class="metric-sub" id="subMetric2">Equally strong across all 4 categories</div>
         </div>
         <div class="metric-card">
-          <div class="metric-label">Macro Precision</div>
+          <div class="metric-label" id="lblMetric3">Reliability (Precision)</div>
           <div class="metric-value accent-purple" id="valMacroPrecision">0.9163</div>
-          <div class="metric-sub">Unweighted Class Average</div>
+          <div class="metric-sub" id="subMetric3">When it predicts a category, it is rarely wrong</div>
         </div>
         <div class="metric-card">
-          <div class="metric-label">Inference Latency</div>
+          <div class="metric-label" id="lblMetric4">Processing Speed</div>
           <div class="metric-value accent-amber" id="valLatency">&lt; 0.1 ms</div>
-          <div class="metric-sub">CPU Latency Per Sample</div>
+          <div class="metric-sub" id="subMetric4">Over 15,000 headlines per second on CPU</div>
         </div>
       </div>
 
@@ -354,12 +416,56 @@
         <!-- Confusion Matrix Card -->
         <div class="card eval-card">
           <div class="card-header">
-            <h2 class="card-title">Test Confusion Matrix</h2>
-            <span class="card-tag">7,600 Test Samples</span>
+            <div>
+              <h2 class="card-title" id="cmCardTitle">Model Decision Matrix</h2>
+              <p class="card-subtitle" id="cmCardSub">Where the model succeeds vs. where it gets confused</p>
+            </div>
+            <div class="cm-view-tabs">
+              <button type="button" class="btn-subtab active" id="btnViewInteractiveMatrix">Interactive Grid</button>
+              <button type="button" class="btn-subtab" id="btnViewPlotMatrix">Plot Heatmap</button>
+            </div>
           </div>
-          <p class="card-desc">Normalized heatmap showing model predictions vs ground truth labels on the official AG News test set.</p>
-          
-          <div class="cm-image-container" id="cmImageContainer">
+
+          <!-- Interactive Grid Container -->
+          <div class="interactive-matrix-container" id="interactiveMatrixContainer">
+            <div class="matrix-axis-label-top">MODEL PREDICTED CATEGORY</div>
+            <div class="matrix-table-wrapper">
+              <div class="matrix-axis-label-left">ACTUAL CATEGORY (GROUND TRUTH)</div>
+              <table class="interactive-matrix-table" id="interactiveMatrixTable">
+                <thead>
+                  <tr>
+                    <th class="matrix-corner">Actual \ Pred</th>
+                    <th>World</th>
+                    <th>Sports</th>
+                    <th>Business</th>
+                    <th>Sci/Tech</th>
+                  </tr>
+                </thead>
+                <tbody id="interactiveMatrixBody">
+                  <!-- Dynamically populated via JS -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Interactive Cell Explainer Box -->
+            <div class="cell-explainer-box" id="cellExplainerBox">
+              <div class="explainer-header">
+                <span class="explainer-tag" id="explainerTag">Selected Cell</span>
+                <strong class="explainer-title" id="explainerTitle">Sports Correct (1,862 articles • 98.0%)</strong>
+              </div>
+              <p class="explainer-desc" id="explainerDesc">
+                Sports is the model's highest-performing category. Athletic vocabulary (scores, game, coach, cup, league, finals) is virtually unique to sports.
+              </p>
+              <div class="explainer-example hidden" id="explainerExample">
+                <span class="example-label">Example headline from this confusion:</span>
+                <blockquote class="example-quote" id="explainerQuote"></blockquote>
+              </div>
+              <small class="explainer-hint">Tip: Click on any box above to explore what happens when categories overlap.</small>
+            </div>
+          </div>
+
+          <!-- Static Heatmap Image (Hidden by default, toggleable) -->
+          <div class="cm-image-container hidden" id="cmImageContainer">
             <img 
               id="confusionMatrixImg" 
               src="/api/confusion-matrix" 
@@ -373,65 +479,53 @@
         <!-- Per-Class Performance Table -->
         <div class="card eval-card">
           <div class="card-header">
-            <h2 class="card-title">Per-Class Metrics Breakdown</h2>
-            <span class="card-tag">Detailed Breakdown</span>
+            <div>
+              <h2 class="card-title">Per-Category Scorecard</h2>
+              <p class="card-subtitle" id="perClassSub">Breakdown of accuracy across all target topics</p>
+            </div>
+            <span class="card-tag" id="perClassTag">Official AG News Test</span>
           </div>
-          <p class="card-desc">Detailed precision, recall, and F1-score across all 4 target news categories.</p>
 
           <div class="table-container">
             <table class="data-table" id="perClassTable">
               <thead>
                 <tr>
                   <th>Category</th>
-                  <th>Precision</th>
-                  <th>Recall</th>
-                  <th>F1-Score</th>
-                  <th>Support</th>
+                  <th id="thPrecision" title="When the model predicts this category, how often is it right?">Reliability (Precision)</th>
+                  <th id="thRecall" title="Out of all real stories in this category, how many did the model catch?">Coverage (Recall)</th>
+                  <th id="thF1" title="Harmonic mean balancing precision and recall">Overall Grade (F1)</th>
+                  <th id="thSupport">Sample Count</th>
                 </tr>
               </thead>
               <tbody id="perClassTableBody">
-                <!-- Dynamically populated from reports/metrics.json -->
-                <tr>
-                  <td><span class="pill pill-world">World</span></td>
-                  <td>93.13%</td>
-                  <td>90.58%</td>
-                  <td><strong>0.9184</strong></td>
-                  <td>1,900</td>
-                </tr>
-                <tr>
-                  <td><span class="pill pill-sports">Sports</span></td>
-                  <td>95.24%</td>
-                  <td>98.00%</td>
-                  <td><strong>0.9660</strong></td>
-                  <td>1,900</td>
-                </tr>
-                <tr>
-                  <td><span class="pill pill-business">Business</span></td>
-                  <td>89.05%</td>
-                  <td>88.16%</td>
-                  <td><strong>0.8860</strong></td>
-                  <td>1,900</td>
-                </tr>
-                <tr>
-                  <td><span class="pill pill-scitech">Sci/Tech</span></td>
-                  <td>89.09%</td>
-                  <td>89.84%</td>
-                  <td><strong>0.8947</strong></td>
-                  <td>1,900</td>
-                </tr>
+                <!-- Dynamically populated from JS -->
               </tbody>
             </table>
           </div>
 
-          <!-- Architecture & Specs Box -->
-          <div class="specs-box">
-            <h4 class="specs-title">Model Pipeline Specifications</h4>
-            <ul class="specs-list">
-              <li><strong>Algorithm:</strong> Multinomial Logistic Regression (L2 penalty, C=1.0)</li>
-              <li><strong>Feature Extraction:</strong> TF-IDF Vectorizer (1–2 n-grams, max 50,000 features, sublinear TF)</li>
-              <li><strong>Dataset:</strong> AG News (108,000 train, 12,000 validation, 7,600 test)</li>
-              <li><strong>Preprocessing:</strong> HTML stripping, whitespace normalization, lowercasing</li>
-            </ul>
+          <!-- Easy Key Takeaways Box -->
+          <div class="insights-summary-box">
+            <h4 class="insights-title">Key Model Insights (What This Means)</h4>
+            <div class="insights-list">
+              <div class="insight-item">
+                <span class="insight-badge success">Strongest Topic</span>
+                <div class="insight-text">
+                  <strong>Sports (96.6% F1):</strong> The easiest category to predict. Athletic words like <em>scores, match, coach, cup</em> rarely appear in other news.
+                </div>
+              </div>
+              <div class="insight-item">
+                <span class="insight-badge warning">Primary Overlap</span>
+                <div class="insight-text">
+                  <strong>Business vs. Sci/Tech (7.9% confusion):</strong> Tech giant earnings (Apple, Nvidia, Microsoft) and software launches naturally contain both business and technology terms.
+                </div>
+              </div>
+              <div class="insight-item">
+                <span class="insight-badge info">Safety Guardrail</span>
+                <div class="insight-text">
+                  <strong>Uncertainty Threshold (&lt; 60%):</strong> Whenever an input is ambiguous or out-of-domain, the system flags it as <em>Uncertain</em> for human editor review.
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
