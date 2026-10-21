@@ -1,0 +1,38 @@
+{
+  "model_type": "TF-IDF + LogisticRegression",
+  "num_test_samples": 7600,
+  "accuracy": 0.9164,
+  "macro_f1": 0.9163,
+  "macro_precision": 0.9163,
+  "macro_recall": 0.9164,
+  "weighted_f1": 0.9163,
+  "weighted_precision": 0.9163,
+  "weighted_recall": 0.9164,
+  "avg_latency_ms_per_sample": 0.053,
+  "per_class": {
+    "World": {
+      "precision": 0.9312770562770563,
+      "recall": 0.9057894736842105,
+      "f1-score": 0.9183564567769477,
+      "support": 1900
+    },
+    "Sports": {
+      "precision": 0.9524296675191816,
+      "recall": 0.98,
+      "f1-score": 0.9660181582360571,
+      "support": 1900
+    },
+    "Business": {
+      "precision": 0.8904837852206273,
+      "recall": 0.881578947368421,
+      "f1-score": 0.8860089923300714,
+      "support": 1900
+    },
+    "Sci/Tech": {
+      "precision": 0.8909185803757829,
+      "recall": 0.8984210526315789,
+      "f1-score": 0.8946540880503144,
+      "support": 1900
+    }
+  }
+}

@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>News Category Classifier | AI-Powered News Classification</title>
+  <meta name="description" content="AI-Powered News Category Classifier using Machine Learning with TF-IDF and Logistic Regression on AG News dataset.">
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header / Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand">
+        <div class="brand-icon">📰</div>
+        <div>
+          <h1 class="brand-title">News Category Classifier</h1>
+          <p class="brand-subtitle">AI-Powered News Classification using Machine Learning</p>
+        </div>
+      </div>
+      
+      <div class="header-right">
+        <!-- Target Categories Badges -->
+        <div class="category-pills" id="categoryPills">
+          <span class="pill pill-world">🌍 World</span>
+          <span class="pill pill-sports">⚽ Sports</span>
+          <span class="pill pill-business">📈 Business</span>
+          <span class="pill pill-scitech">🔬 Sci/Tech</span>
+        </div>
+
+        <!-- Backend Health Status Indicator -->
+        <div class="api-status" id="apiStatus" title="Checking Flask API connectivity...">
+          <span class="status-dot status-checking"></span>
+          <span class="status-text" id="apiStatusText">Connecting API...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs" role="tablist">
+      <div class="tabs-container">
+        <button class="tab-btn active" id="tabBtnPredict" role="tab" aria-selected="true" data-tab="tabPredict">
+          <span class="tab-icon">⚡</span> Single Headline
+        </button>
+        <button class="tab-btn" id="tabBtnBatch" role="tab" aria-selected="false" data-tab="tabBatch">
+          <span class="tab-icon">📁</span> Batch CSV Prediction
+        </button>
+        <button class="tab-btn" id="tabBtnEvaluation" role="tab" aria-selected="false" data-tab="tabEvaluation">
+          <span class="tab-icon">📊</span> Evaluation &amp; Metrics
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="main-content">
+    
+    <!-- ========================================== -->
+    <!-- TAB 1: SINGLE PREDICTION                   -->
+    <!-- ========================================== -->
+    <section class="tab-panel active" id="tabPredict" role="tabpanel">
+      <div class="panel-grid">
+        <!-- Left Column: Input Form -->
+        <div class="card input-card">
+          <div class="card-header">
+            <h2 class="card-title">Classify News Text</h2>
+            <span class="card-tag">Real-Time Inference</span>
+          </div>
+
+          <!-- Quick Presets -->
+          <div class="presets-section">
+            <span class="presets-label">💡 Try an example:</span>
+            <div class="preset-chips">
+              <button type="button" class="preset-chip" data-category="Sports" data-text="Messi scores twice in Champions League final as team secures historic treble victory">
+                ⚽ Sports
+              </button>
+              <button type="button" class="preset-chip" data-category="Sci/Tech" data-text="NASA James Webb telescope reveals high-resolution spectroscopic data of distant exoplanet atmosphere">
+                🔬 Sci/Tech
+              </button>
+              <button type="button" class="preset-chip" data-category="Business" data-text="Federal Reserve signals interest rate adjustments following quarterly corporate earnings surge">
+                📈 Business
+              </button>
+              <button type="button" class="preset-chip" data-category="World" data-text="United Nations security council diplomats convene in Geneva for international peace treaty negotiations">
+                🌍 World
+              </button>
+            </div>
+          </div>
+
+          <!-- Input Area -->
+          <form id="predictionForm" class="prediction-form">
+            <div class="form-group">
+              <div class="label-row">
+                <label for="headlineInput" class="form-label">Headline or Article Snippet:</label>
+                <span class="char-count" id="charCount">0 characters</span>
+              </div>
+              <textarea 
+                id="headlineInput" 
+                class="form-textarea" 
+                rows="5" 
+                placeholder="Enter a news headline or article..."
+                required
+              >Messi scores twice in Champions League final</textarea>
+            </div>
+
+            <div class="form-row">
+              <!-- Model Selector -->
+              <div class="form-group model-group">
+                <label for="modelSelect" class="form-label">Model Architecture:</label>
+                <div class="select-wrapper">
+                  <select id="modelSelect" class="form-select">
+                    <option value="baseline" selected>Baseline — TF-IDF + Logistic Regression (Active)</option>
+                    <option value="distilbert" id="distilbertOption" disabled>DistilBERT — Fine-tuned Transformer (Not Trained)</option>
+                  </select>
+                </div>
+                <small class="form-hint" id="modelHint">⚡ Baseline model is loaded on disk (~0.05 ms CPU latency).</small>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="form-actions">
+              <button type="submit" id="btnClassify" class="btn btn-primary">
+                <span class="btn-spinner hidden" id="predictSpinner"></span>
+                <span class="btn-text">Classify News</span>
+              </button>
+              <button type="button" id="btnClearText" class="btn btn-secondary">
+                Clear
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Right Column: Result Card -->
+        <div class="card result-card" id="resultCard">
+          <div class="card-header">
+            <h2 class="card-title">Prediction Result</h2>
+            <span class="latency-badge hidden" id="latencyBadge">⚡ 0.05 ms</span>
+          </div>
+
+          <!-- Empty State -->
+          <div class="empty-state" id="predictEmptyState">
+            <div class="empty-icon">🎯</div>
+            <h3>Ready for Classification</h3>
+            <p>Type or paste a news headline above and click <strong>"Classify News"</strong> to see AI predictions and class probabilities.</p>
+          </div>
+
+          <!-- Error State -->
+          <div class="alert alert-error hidden" id="predictErrorAlert">
+            <span class="alert-icon">⚠️</span>
+            <div class="alert-content" id="predictErrorMsg">Prediction failed.</div>
+          </div>
+
+          <!-- Result Content -->
+          <div class="result-body hidden" id="predictResultBody">
+            <!-- Low-Confidence Warning Banner -->
+            <div class="alert alert-warning hidden" id="lowConfidenceAlert">
+              <span class="alert-icon">⚠️</span>
+              <div class="alert-content">
+                <strong>Uncertain Prediction</strong>
+                <p>The model has low confidence in this classification (&lt; 60%). The text may be ambiguous, multi-topic, or out-of-domain.</p>
+              </div>
+            </div>
+
+            <!-- Predicted Class Banner -->
+            <div class="predicted-banner" id="predictedBanner">
+              <div class="banner-top">
+                <span class="banner-subtitle">PREDICTED CATEGORY</span>
+                <div class="banner-actions">
+                  <button type="button" class="btn-copy" id="btnCopyPrediction" title="Copy prediction result">📋 Copy</button>
+                  <span class="banner-badge" id="categoryBadge">Sports</span>
+                </div>
+              </div>
+              <div class="banner-main">
+                <div class="banner-icon" id="categoryIcon">⚽</div>
+                <div class="banner-info">
+                  <h3 class="banner-class" id="categoryLabel">SPORTS</h3>
+                  <div class="banner-confidence">
+                    Confidence: <strong id="confidenceValue">96.4%</strong>
+                  </div>
+                </div>
+              </div>
+              <!-- Horizontal Confidence Progress Bar -->
+              <div class="confidence-bar-wrapper">
+                <div class="confidence-bar-track">
+                  <div class="confidence-bar-fill" id="confidenceBarFill" style="width: 96.4%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Top-K Probability Distribution -->
+            <div class="probabilities-section">
+              <h4 class="section-heading">Class Probability Distribution</h4>
+              <div class="probability-bars" id="probabilityBars">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+
+            <!-- Explainable AI (XAI): Why This Prediction? -->
+            <div class="explanation-section" id="explanationSection">
+              <div class="explanation-header">
+                <h4 class="section-heading">💡 Why This Prediction?</h4>
+                <span class="xai-tag">Feature Contributions</span>
+              </div>
+              <p class="explanation-desc">
+                The prediction was influenced most strongly by the words/features shown above.
+              </p>
+              <div class="explanation-bars" id="explanationBars">
+                <!-- Dynamically populated via JavaScript -->
+              </div>
+              <div class="explanation-empty hidden" id="explanationEmpty">
+                <em>Feature explanation is not available for this input.</em>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 2: BATCH CSV PREDICTION                -->
+    <!-- ========================================== -->
+    <section class="tab-panel hidden" id="tabBatch" role="tabpanel">
+      <div class="card batch-card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">Batch CSV Prediction</h2>
+            <p class="card-subtitle">Upload a CSV file containing multiple headlines to classify them in bulk.</p>
+          </div>
+          <button type="button" class="btn btn-sm btn-outline" id="btnDownloadSampleCsv">
+            📥 Download Sample CSV
+          </button>
+        </div>
+
+        <!-- Upload Dropzone -->
+        <div class="upload-dropzone" id="uploadDropzone">
+          <input type="file" id="batchFileInput" accept=".csv" class="file-input-hidden">
+          <div class="dropzone-content">
+            <div class="dropzone-icon">📁</div>
+            <h3 class="dropzone-title">Drag &amp; drop your CSV file here</h3>
+            <p class="dropzone-sub">or <button type="button" class="btn-browse" id="btnBrowseFile">browse from your computer</button></p>
+            <span class="dropzone-hint">Accepts standard .csv files with headline or text columns</span>
+          </div>
+        </div>
+
+        <!-- File Config & Preview Bar -->
+        <div class="file-config-bar hidden" id="fileConfigBar">
+          <div class="file-info">
+            <span class="file-icon">📄</span>
+            <div>
+              <strong class="file-name" id="batchFileName">news_data.csv</strong>
+              <div class="file-meta" id="batchFileMeta">10 rows • 1.2 KB</div>
+            </div>
+          </div>
+
+          <div class="file-actions">
+            <div class="form-group inline-group">
+              <label for="textColSelect" class="form-label-inline">Text Column:</label>
+              <select id="textColSelect" class="form-select form-select-sm">
+                <!-- Dynamically populated from CSV header -->
+              </select>
+            </div>
+
+            <button type="button" id="btnRunBatch" class="btn btn-primary">
+              <span class="btn-spinner hidden" id="batchSpinner"></span>
+              <span class="btn-text">Run Batch Prediction</span>
+            </button>
+
+            <button type="button" id="btnRemoveFile" class="btn btn-secondary btn-icon" title="Remove file">
+              ✕
+            </button>
+          </div>
+        </div>
+
+        <!-- Batch Error Alert -->
+        <div class="alert alert-error hidden" id="batchErrorAlert">
+          <span class="alert-icon">⚠️</span>
+          <div class="alert-content" id="batchErrorMsg">Error running batch classification.</div>
+        </div>
+
+        <!-- Batch Results Area -->
+        <div class="batch-results-section hidden" id="batchResultsSection">
+          <div class="batch-summary-header">
+            <div>
+              <h3 class="results-heading">Classification Results</h3>
+              <p class="results-sub" id="batchSummaryStats">Successfully classified 0 items</p>
+            </div>
+            <button type="button" class="btn btn-success" id="btnDownloadResultsCsv">
+              📥 Download Results CSV
+            </button>
+          </div>
+
+          <!-- Results Table -->
+          <div class="table-container">
+            <table class="data-table" id="batchResultsTable">
+              <thead>
+                <tr>
+                  <th style="width: 50px;">#</th>
+                  <th>Original Text</th>
+                  <th style="width: 160px;">Predicted Category</th>
+                  <th style="width: 140px;">Confidence</th>
+                  <th style="width: 120px;">Status</th>
+                </tr>
+              </thead>
+              <tbody id="batchTableBody">
+                <!-- Populated via JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 3: EVALUATION & METRICS                -->
+    <!-- ========================================== -->
+    <section class="tab-panel hidden" id="tabEvaluation" role="tabpanel">
+      <!-- Top Metrics Overview -->
+      <div class="metrics-grid" id="metricsCardsGrid">
+        <div class="metric-card">
+          <div class="metric-label">Test Accuracy</div>
+          <div class="metric-value accent-blue" id="valAccuracy">91.64%</div>
+          <div class="metric-sub">Official AG News Test Set</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Macro F1-Score</div>
+          <div class="metric-value accent-green" id="valMacroF1">0.9163</div>
+          <div class="metric-sub">Harmonic Mean of Precision &amp; Recall</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Macro Precision</div>
+          <div class="metric-value accent-purple" id="valMacroPrecision">0.9163</div>
+          <div class="metric-sub">Unweighted Class Average</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">Inference Latency</div>
+          <div class="metric-value accent-amber" id="valLatency">&lt; 0.1 ms</div>
+          <div class="metric-sub">CPU Latency Per Sample</div>
+        </div>
+      </div>
+
+      <!-- Detail Grid: Confusion Matrix & Per-Class Breakdown -->
+      <div class="eval-grid">
+        <!-- Confusion Matrix Card -->
+        <div class="card eval-card">
+          <div class="card-header">
+            <h2 class="card-title">Test Confusion Matrix</h2>
+            <span class="card-tag">7,600 Test Samples</span>
+          </div>
+          <p class="card-desc">Normalized heatmap showing model predictions vs ground truth labels on the official AG News test set.</p>
+          
+          <div class="cm-image-container" id="cmImageContainer">
+            <img 
+              id="confusionMatrixImg" 
+              src="/api/confusion-matrix" 
+              alt="AG News Category Classification Confusion Matrix" 
+              class="cm-image"
+              loading="lazy"
+            >
+          </div>
+        </div>
+
+        <!-- Per-Class Performance Table -->
+        <div class="card eval-card">
+          <div class="card-header">
+            <h2 class="card-title">Per-Class Metrics Breakdown</h2>
+            <span class="card-tag">Detailed Breakdown</span>
+          </div>
+          <p class="card-desc">Detailed precision, recall, and F1-score across all 4 target news categories.</p>
+
+          <div class="table-container">
+            <table class="data-table" id="perClassTable">
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Precision</th>
+                  <th>Recall</th>
+                  <th>F1-Score</th>
+                  <th>Support</th>
+                </tr>
+              </thead>
+              <tbody id="perClassTableBody">
+                <!-- Dynamically populated from reports/metrics.json -->
+                <tr>
+                  <td><span class="pill pill-world">🌍 World</span></td>
+                  <td>93.13%</td>
+                  <td>90.58%</td>
+                  <td><strong>0.9184</strong></td>
+                  <td>1,900</td>
+                </tr>
+                <tr>
+                  <td><span class="pill pill-sports">⚽ Sports</span></td>
+                  <td>95.24%</td>
+                  <td>98.00%</td>
+                  <td><strong>0.9660</strong></td>
+                  <td>1,900</td>
+                </tr>
+                <tr>
+                  <td><span class="pill pill-business">📈 Business</span></td>
+                  <td>89.05%</td>
+                  <td>88.16%</td>
+                  <td><strong>0.8860</strong></td>
+                  <td>1,900</td>
+                </tr>
+                <tr>
+                  <td><span class="pill pill-scitech">🔬 Sci/Tech</span></td>
+                  <td>89.09%</td>
+                  <td>89.84%</td>
+                  <td><strong>0.8947</strong></td>
+                  <td>1,900</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Architecture & Specs Box -->
+          <div class="specs-box">
+            <h4 class="specs-title">⚙️ Model Pipeline Specifications</h4>
+            <ul class="specs-list">
+              <li><strong>Algorithm:</strong> Multinomial Logistic Regression (L2 penalty, C=1.0)</li>
+              <li><strong>Feature Extraction:</strong> TF-IDF Vectorizer (1–2 n-grams, max 50,000 features, sublinear TF)</li>
+              <li><strong>Dataset:</strong> AG News (108,000 train, 12,000 validation, 7,600 test)</li>
+              <li><strong>Preprocessing:</strong> HTML stripping, whitespace normalization, lowercasing</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="footer-container">
+      <p><strong>News Category Classifier</strong> • AI-Powered Machine Learning Project</p>
+      <div class="footer-links">
+        <a href="/api/health" target="_blank" rel="noopener">API Health</a>
+        <span>•</span>
+        <a href="/api/metrics" target="_blank" rel="noopener">Raw Metrics</a>
+        <span>•</span>
+        <a href="/api/confusion-matrix" target="_blank" rel="noopener">Confusion Matrix</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
