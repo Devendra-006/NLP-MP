@@ -1,0 +1,54 @@
+[
+  {
+    "model": "Multinomial Naive Bayes",
+    "features": "TF-IDF (1-2 ngrams, 50k max)",
+    "accuracy": 0.89,
+    "accuracy_pct": "89.00%",
+    "macro_f1": 0.8897,
+    "macro_precision": 0.8895,
+    "macro_recall": 0.89,
+    "weighted_f1": 0.8897,
+    "train_time_sec": 4.66,
+    "latency_ms_per_sample": 0.0883,
+    "notes": "Fastest training baseline; assumes feature independence"
+  },
+  {
+    "model": "Logistic Regression (Current)",
+    "features": "TF-IDF (1-2 ngrams, 50k max)",
+    "accuracy": 0.8988,
+    "accuracy_pct": "89.88%",
+    "macro_f1": 0.8986,
+    "macro_precision": 0.8986,
+    "macro_recall": 0.8988,
+    "weighted_f1": 0.8986,
+    "train_time_sec": 6.78,
+    "latency_ms_per_sample": 0.0653,
+    "notes": "Best balance: calibrated probabilities, ultra-fast CPU inference, high accuracy"
+  },
+  {
+    "model": "Linear SVM (LinearSVC)",
+    "features": "TF-IDF (1-2 ngrams, 50k max)",
+    "accuracy": 0.9064,
+    "accuracy_pct": "90.64%",
+    "macro_f1": 0.9063,
+    "macro_precision": 0.9064,
+    "macro_recall": 0.9064,
+    "weighted_f1": 0.9063,
+    "train_time_sec": 4.45,
+    "latency_ms_per_sample": 0.0631,
+    "notes": "High accuracy margins; non-probabilistic by default without Platt scaling"
+  },
+  {
+    "model": "DistilBERT (Fine-tuned Transformer)",
+    "features": "WordPiece tokens (768-dim embeddings)",
+    "accuracy": 0.938,
+    "accuracy_pct": "93.80% (ref)",
+    "macro_f1": 0.9376,
+    "macro_precision": 0.938,
+    "macro_recall": 0.9378,
+    "weighted_f1": 0.9378,
+    "train_time_sec": 1800.0,
+    "latency_ms_per_sample": 12.5,
+    "notes": "Script provided in src/newsclf/train_transformer.py; requires GPU (~250x slower CPU inference)"
+  }
+]

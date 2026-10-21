@@ -1,0 +1,250 @@
+{
+  "World": [
+    {
+      "feature": "afp",
+      "weight": 6.9383
+    },
+    {
+      "feature": "iraq",
+      "weight": 6.7678
+    },
+    {
+      "feature": "president",
+      "weight": 5.4086
+    },
+    {
+      "feature": "afp afp",
+      "weight": 5.0919
+    },
+    {
+      "feature": "iraqi",
+      "weight": 5.069
+    },
+    {
+      "feature": "nuclear",
+      "weight": 5.0401
+    },
+    {
+      "feature": "iran",
+      "weight": 4.8754
+    },
+    {
+      "feature": "un",
+      "weight": 4.6788
+    },
+    {
+      "feature": "canadian press",
+      "weight": 4.6175
+    },
+    {
+      "feature": "military",
+      "weight": 4.263
+    },
+    {
+      "feature": "arafat",
+      "weight": 4.1583
+    },
+    {
+      "feature": "troops",
+      "weight": 4.1484
+    },
+    {
+      "feature": "palestinian",
+      "weight": 4.1106
+    },
+    {
+      "feature": "leader",
+      "weight": 4.0921
+    },
+    {
+      "feature": "israel",
+      "weight": 4.0303
+    }
+  ],
+  "Sports": [
+    {
+      "feature": "coach",
+      "weight": 6.7294
+    },
+    {
+      "feature": "cup",
+      "weight": 6.3319
+    },
+    {
+      "feature": "team",
+      "weight": 6.303
+    },
+    {
+      "feature": "sports",
+      "weight": 6.0182
+    },
+    {
+      "feature": "league",
+      "weight": 5.5794
+    },
+    {
+      "feature": "baseball",
+      "weight": 5.2766
+    },
+    {
+      "feature": "players",
+      "weight": 5.0802
+    },
+    {
+      "feature": "season",
+      "weight": 4.9551
+    },
+    {
+      "feature": "39",
+      "weight": 4.9222
+    },
+    {
+      "feature": "olympic",
+      "weight": 4.8829
+    },
+    {
+      "feature": "stadium",
+      "weight": 4.4811
+    },
+    {
+      "feature": "football",
+      "weight": 4.1218
+    },
+    {
+      "feature": "nba",
+      "weight": 4.1145
+    },
+    {
+      "feature": "athens",
+      "weight": 4.0501
+    },
+    {
+      "feature": "nascar",
+      "weight": 4.0489
+    }
+  ],
+  "Business": [
+    {
+      "feature": "oil",
+      "weight": 5.9896
+    },
+    {
+      "feature": "economy",
+      "weight": 4.8925
+    },
+    {
+      "feature": "tax",
+      "weight": 4.7306
+    },
+    {
+      "feature": "bank",
+      "weight": 4.6458
+    },
+    {
+      "feature": "economic",
+      "weight": 4.4967
+    },
+    {
+      "feature": "york reuters",
+      "weight": 4.1314
+    },
+    {
+      "feature": "company",
+      "weight": 4.1105
+    },
+    {
+      "feature": "inc",
+      "weight": 4.0844
+    },
+    {
+      "feature": "airlines",
+      "weight": 4.0292
+    },
+    {
+      "feature": "prices",
+      "weight": 4.0288
+    },
+    {
+      "feature": "insurance",
+      "weight": 3.8502
+    },
+    {
+      "feature": "corp",
+      "weight": 3.8494
+    },
+    {
+      "feature": "us",
+      "weight": 3.8478
+    },
+    {
+      "feature": "business",
+      "weight": 3.803
+    },
+    {
+      "feature": "amp",
+      "weight": 3.728
+    }
+  ],
+  "Sci/Tech": [
+    {
+      "feature": "space",
+      "weight": 7.1205
+    },
+    {
+      "feature": "internet",
+      "weight": 6.4374
+    },
+    {
+      "feature": "nasa",
+      "weight": 6.285
+    },
+    {
+      "feature": "microsoft",
+      "weight": 5.8657
+    },
+    {
+      "feature": "software",
+      "weight": 5.8268
+    },
+    {
+      "feature": "scientists",
+      "weight": 5.6388
+    },
+    {
+      "feature": "reuters reuters",
+      "weight": 5.5136
+    },
+    {
+      "feature": "apple",
+      "weight": 5.1394
+    },
+    {
+      "feature": "online",
+      "weight": 5.0612
+    },
+    {
+      "feature": "web",
+      "weight": 4.8242
+    },
+    {
+      "feature": "linux",
+      "weight": 4.757
+    },
+    {
+      "feature": "technology",
+      "weight": 4.7171
+    },
+    {
+      "feature": "computer",
+      "weight": 4.59
+    },
+    {
+      "feature": "ibm",
+      "weight": 4.5301
+    },
+    {
+      "feature": "study",
+      "weight": 4.1421
+    }
+  ]
+}

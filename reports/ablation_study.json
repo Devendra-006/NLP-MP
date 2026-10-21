@@ -1,0 +1,50 @@
+[
+  {
+    "experiment": "1. Raw Text (No Preprocessing)",
+    "description": "Preserves uppercase, raw HTML tags, and literal whitespace.",
+    "accuracy": 0.8984,
+    "accuracy_pct": "89.84%",
+    "macro_f1": 0.8981,
+    "train_time_sec": 6.21
+  },
+  {
+    "experiment": "2. Lowercase Only",
+    "description": "Lowercases all characters without stripping HTML entities.",
+    "accuracy": 0.8984,
+    "accuracy_pct": "89.84%",
+    "macro_f1": 0.8981,
+    "train_time_sec": 6.05
+  },
+  {
+    "experiment": "3. Current Pipeline (Production)",
+    "description": "HTML stripping + entity unescaping + whitespace normalization + lowercasing.",
+    "accuracy": 0.8983,
+    "accuracy_pct": "89.83%",
+    "macro_f1": 0.898,
+    "train_time_sec": 6.87
+  },
+  {
+    "experiment": "4. Current Pipeline + Stopword Removal",
+    "description": "Applies standard English stopword list to TF-IDF n-grams.",
+    "accuracy": 0.9054,
+    "accuracy_pct": "90.54%",
+    "macro_f1": 0.9051,
+    "train_time_sec": 6.74
+  },
+  {
+    "experiment": "5. Current Pipeline (10k Features)",
+    "description": "Restricted vocabulary size (10,000 maximum n-gram features).",
+    "accuracy": 0.8959,
+    "accuracy_pct": "89.59%",
+    "macro_f1": 0.8957,
+    "train_time_sec": 5.95
+  },
+  {
+    "experiment": "6. Current Pipeline (100k Features)",
+    "description": "Expanded vocabulary size (100,000 maximum n-gram features).",
+    "accuracy": 0.8986,
+    "accuracy_pct": "89.86%",
+    "macro_f1": 0.8982,
+    "train_time_sec": 11.2
+  }
+]

@@ -225,10 +225,14 @@ def predict(
 
     top_k_probs = {k: round(v, 4) for k, v in sorted_classes[:top_k]}
 
+    is_short = len(str(text).strip()) < 5 or len(str(text).split()) < 2
+    is_uncertain = bool(best_conf < 0.60 or is_short)
+
     res = {
         "label": best_label,
         "confidence": round(float(best_conf), 4),
         "top_k_probs": top_k_probs,
+        "uncertain": is_uncertain,
     }
 
     if explain:

@@ -28,8 +28,11 @@ env/
 venv/
 ENV/
 
-# Data Cache
-data/
+# Data Cache (Ignore bulky downloads, but keep curated benchmarks & docs)
+data/*
+!data/README.md
+!data/modern_headlines.csv
+!data/out_of_domain_headlines.csv
 
 # Model Checkpoints (Ignore bulky transformer runs, but keep baseline_model.joblib)
 models/*
