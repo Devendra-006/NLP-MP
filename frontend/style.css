@@ -112,7 +112,8 @@ body {
 }
 
 .brand-icon {
-  font-size: 2.2rem;
+  font-size: 1.4rem;
+  color: var(--primary-color);
   background: var(--bg-surface);
   width: 52px;
   height: 52px;
@@ -592,8 +593,28 @@ body {
 }
 
 .alert-icon {
-  font-size: 1.2rem;
+  font-size: 0.85rem;
+  font-weight: 800;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: currentColor;
+  color: #FFFFFF;
+  line-height: 1;
   flex-shrink: 0;
+}
+
+.alert-warning .alert-icon {
+  background: var(--warning-color);
+  color: #FFFFFF;
+}
+
+.alert-error .alert-icon {
+  background: var(--danger-color);
+  color: #FFFFFF;
 }
 
 .alert-warning {
@@ -686,10 +707,12 @@ body {
 }
 
 .banner-icon {
-  font-size: 3rem;
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
   background: #FFFFFF;
-  width: 64px;
-  height: 64px;
+  width: 56px;
+  height: 56px;
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;

@@ -14,7 +14,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Category Configuration
   const CATEGORY_META = {
     "World": {
-      icon: "🌍",
+      tag: "WO",
+      icon: "",
       color: "#2563EB",
       bg: "#EFF6FF",
       border: "#BFDBFE",
@@ -22,7 +23,8 @@ document.addEventListener("DOMContentLoaded", () => {
       pillClass: "pill-world",
     },
     "Sports": {
-      icon: "⚽",
+      tag: "SP",
+      icon: "",
       color: "#059669",
       bg: "#ECFDF5",
       border: "#A7F3D0",
@@ -30,7 +32,8 @@ document.addEventListener("DOMContentLoaded", () => {
       pillClass: "pill-sports",
     },
     "Business": {
-      icon: "📈",
+      tag: "BU",
+      icon: "",
       color: "#D97706",
       bg: "#FFFBEB",
       border: "#FDE68A",
@@ -38,7 +41,8 @@ document.addEventListener("DOMContentLoaded", () => {
       pillClass: "pill-business",
     },
     "Sci/Tech": {
-      icon: "🔬",
+      tag: "ST",
+      icon: "",
       color: "#7C3AED",
       bg: "#F5F3FF",
       border: "#DDD6FE",
@@ -46,7 +50,8 @@ document.addEventListener("DOMContentLoaded", () => {
       pillClass: "pill-scitech",
     },
     "Unknown": {
-      icon: "❓",
+      tag: "--",
+      icon: "",
       color: "#64748B",
       bg: "#F1F5F9",
       border: "#CBD5E1",
@@ -142,7 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (err) {
       statusDot.className = "status-dot status-offline";
       apiStatusText.textContent = "API Offline";
-      apiStatus.title = `⚠ Unable to connect to the prediction server (${API_BASE}). Start backend with: python -m backend.app`;
+      apiStatus.title = `Unable to connect to the prediction server (${API_BASE}). Start backend with: python -m backend.app`;
       return false;
     }
   }
@@ -225,16 +230,16 @@ document.addEventListener("DOMContentLoaded", () => {
       const conf = confidenceValue ? confidenceValue.textContent : "";
       const copyText = `Predicted Category: ${label} (Confidence: ${conf})`;
       navigator.clipboard.writeText(copyText).then(() => {
-        btnCopyPrediction.textContent = "✓ Copied!";
+        btnCopyPrediction.textContent = "Copied!";
         btnCopyPrediction.classList.add("copied");
         setTimeout(() => {
-          btnCopyPrediction.textContent = "📋 Copy";
+          btnCopyPrediction.textContent = "Copy";
           btnCopyPrediction.classList.remove("copied");
         }, 2000);
       }).catch(() => {
-        btnCopyPrediction.textContent = "✓ Copied!";
+        btnCopyPrediction.textContent = "Copied!";
         setTimeout(() => {
-          btnCopyPrediction.textContent = "📋 Copy";
+          btnCopyPrediction.textContent = "Copy";
         }, 2000);
       });
     });
@@ -267,13 +272,13 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
     const text = headlineInput.value.trim();
     if (!text) {
-      showPredictError("⚠ Please enter some news text.");
+      showPredictError("Please enter some news text.");
       headlineInput.focus();
       return;
     }
 
     if (text.length > 50000) {
-      showPredictError("⚠ Input text is too long (maximum 50,000 characters). Please provide a shorter headline or excerpt.");
+      showPredictError("Input text is too long (maximum 50,000 characters). Please provide a shorter headline or excerpt.");
       return;
     }
 
@@ -297,7 +302,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       if (data.label === "Unknown" && (!data.confidence || data.confidence === 0)) {
-        showPredictError(data.warning || "⚠ Please enter some news text.");
+        showPredictError(data.warning || "Please enter some news text.");
         return;
       }
 
@@ -305,9 +310,9 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (err) {
       const isNetworkErr = err.name === "TypeError" || String(err).includes("Failed to fetch") || String(err).includes("NetworkError");
       if (isNetworkErr) {
-        showPredictError("⚠ Unable to connect to the prediction server. Please make sure the Flask backend is running on http://127.0.0.1:5000.");
+        showPredictError("Unable to connect to the prediction server. Please make sure the Flask backend is running on http://127.0.0.1:5000.");
       } else {
-        showPredictError(err.message || "⚠ Unable to connect to the prediction server.");
+        showPredictError(err.message || "Unable to connect to the prediction server.");
       }
     } finally {
       setPredictLoading(false);
@@ -337,7 +342,7 @@ document.addEventListener("DOMContentLoaded", () => {
     predictResultBody.classList.remove("hidden");
 
     // Display inference latency
-    latencyBadge.textContent = `⚡ ${elapsedMs} ms`;
+    latencyBadge.textContent = `${elapsedMs} ms`;
     latencyBadge.classList.remove("hidden");
 
     const label = result.label || "Unknown";
@@ -349,7 +354,8 @@ document.addEventListener("DOMContentLoaded", () => {
     predictedBanner.className = `predicted-banner ${meta.classSlug}`;
     categoryBadge.textContent = label;
     categoryBadge.className = `banner-badge ${meta.pillClass}`;
-    categoryIcon.textContent = meta.icon;
+    categoryIcon.textContent = meta.tag;
+    categoryIcon.style.color = meta.color;
     categoryLabel.textContent = label.toUpperCase();
     confidenceValue.textContent = confidencePct;
     confidenceBarFill.style.width = confidencePct;
@@ -429,7 +435,6 @@ document.addEventListener("DOMContentLoaded", () => {
       row.innerHTML = `
         <div class="prob-meta">
           <span class="prob-label">
-            <span>${meta.icon}</span>
             <span>${cat}</span>
           </span>
           <span class="prob-val">${pct}%</span>
@@ -479,7 +484,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function handleFileSelected(file) {
     if (!file.name.toLowerCase().endsWith(".csv")) {
-      showBatchError("⚠ Invalid file type. Please upload a valid CSV file (.csv).");
+      showBatchError("Invalid file type. Please upload a valid CSV file (.csv).");
       return;
     }
 
@@ -492,7 +497,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const content = evt.target.result;
       const lines = content.split(/\r?\n/).filter(line => line.trim().length > 0);
       if (lines.length === 0) {
-        showBatchError("⚠ The uploaded CSV file contains no data rows.");
+        showBatchError("The uploaded CSV file contains no data rows.");
         return;
       }
 
@@ -502,7 +507,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const estRows = Math.max(0, lines.length - 1);
 
       if (estRows === 0) {
-        showBatchError("⚠ The uploaded CSV file contains only headers with no data rows.");
+        showBatchError("The uploaded CSV file contains only headers with no data rows.");
         return;
       }
 
@@ -531,7 +536,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     reader.onerror = () => {
-      showBatchError("⚠ Failed to read the local CSV file.");
+      showBatchError("Failed to read the local CSV file.");
     };
 
     // Read initial 32KB to parse columns quickly
@@ -570,13 +575,13 @@ document.addEventListener("DOMContentLoaded", () => {
   // Run Batch Prediction
   btnRunBatch.addEventListener("click", async () => {
     if (!currentFile) {
-      showBatchError("⚠ Please select a CSV file first.");
+      showBatchError("Please select a CSV file first.");
       return;
     }
 
     const textCol = textColSelect.value;
     if (!textCol) {
-      showBatchError("⚠ Please select a valid text column.");
+      showBatchError("Please select a valid text column.");
       return;
     }
 
@@ -606,9 +611,9 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (err) {
       const isNetworkErr = err.name === "TypeError" || String(err).includes("Failed to fetch") || String(err).includes("NetworkError");
       if (isNetworkErr) {
-        showBatchError("⚠ Unable to connect to the prediction server. Please make sure the Flask backend is running on http://127.0.0.1:5000.");
+        showBatchError("Unable to connect to the prediction server. Please make sure the Flask backend is running on http://127.0.0.1:5000.");
       } else {
-        showBatchError(err.message || "⚠ Unable to connect to the prediction server.");
+        showBatchError(err.message || "Unable to connect to the prediction server.");
       }
     } finally {
       setBatchLoading(false);
@@ -650,14 +655,14 @@ document.addEventListener("DOMContentLoaded", () => {
         <td class="table-text" title="${escapeHtml(row.text)}">${escapeHtml(row.text)}</td>
         <td>
           <span class="pill ${meta.pillClass}">
-            ${meta.icon} ${cat}
+            ${cat}
           </span>
         </td>
         <td><strong>${conf}%</strong></td>
         <td>
           ${isLowConf 
-            ? `<span style="color: #B45309; font-weight: 700; font-size: 0.78rem;">⚠️ Low Conf</span>`
-            : `<span style="color: #059669; font-weight: 600; font-size: 0.78rem;">✓ Confident</span>`
+            ? `<span style="color: #B45309; font-weight: 700; font-size: 0.78rem;">Low Confidence</span>`
+            : `<span style="color: #059669; font-weight: 600; font-size: 0.78rem;">Confident</span>`
           }
         </td>
       `;
@@ -755,7 +760,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
           const tr = document.createElement("tr");
           tr.innerHTML = `
-            <td><span class="pill ${meta.pillClass}">${meta.icon} ${catName}</span></td>
+            <td><span class="pill ${meta.pillClass}">${catName}</span></td>
             <td>${prec}</td>
             <td>${rec}</td>
             <td><strong>${f1}</strong></td>

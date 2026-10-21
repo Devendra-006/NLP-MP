@@ -16,7 +16,9 @@
   <header class="app-header">
     <div class="header-container">
       <div class="brand">
-        <div class="brand-icon">📰</div>
+        <div class="brand-icon" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>
+        </div>
         <div>
           <h1 class="brand-title">News Category Classifier</h1>
           <p class="brand-subtitle">AI-Powered News Classification using Machine Learning</p>
@@ -26,10 +28,10 @@
       <div class="header-right">
         <!-- Target Categories Badges -->
         <div class="category-pills" id="categoryPills">
-          <span class="pill pill-world">🌍 World</span>
-          <span class="pill pill-sports">⚽ Sports</span>
-          <span class="pill pill-business">📈 Business</span>
-          <span class="pill pill-scitech">🔬 Sci/Tech</span>
+          <span class="pill pill-world">World</span>
+          <span class="pill pill-sports">Sports</span>
+          <span class="pill pill-business">Business</span>
+          <span class="pill pill-scitech">Sci/Tech</span>
         </div>
 
         <!-- Backend Health Status Indicator -->
@@ -44,13 +46,13 @@
     <nav class="nav-tabs" role="tablist">
       <div class="tabs-container">
         <button class="tab-btn active" id="tabBtnPredict" role="tab" aria-selected="true" data-tab="tabPredict">
-          <span class="tab-icon">⚡</span> Single Headline
+          Single Headline
         </button>
         <button class="tab-btn" id="tabBtnBatch" role="tab" aria-selected="false" data-tab="tabBatch">
-          <span class="tab-icon">📁</span> Batch CSV Prediction
+          Batch CSV Prediction
         </button>
         <button class="tab-btn" id="tabBtnEvaluation" role="tab" aria-selected="false" data-tab="tabEvaluation">
-          <span class="tab-icon">📊</span> Evaluation &amp; Metrics
+          Evaluation &amp; Metrics
         </button>
       </div>
     </nav>
@@ -73,19 +75,19 @@
 
           <!-- Quick Presets -->
           <div class="presets-section">
-            <span class="presets-label">💡 Try an example:</span>
+            <span class="presets-label">Try an example:</span>
             <div class="preset-chips">
               <button type="button" class="preset-chip" data-category="Sports" data-text="Messi scores twice in Champions League final as team secures historic treble victory">
-                ⚽ Sports
+                Sports
               </button>
               <button type="button" class="preset-chip" data-category="Sci/Tech" data-text="NASA James Webb telescope reveals high-resolution spectroscopic data of distant exoplanet atmosphere">
-                🔬 Sci/Tech
+                Sci/Tech
               </button>
               <button type="button" class="preset-chip" data-category="Business" data-text="Federal Reserve signals interest rate adjustments following quarterly corporate earnings surge">
-                📈 Business
+                Business
               </button>
               <button type="button" class="preset-chip" data-category="World" data-text="United Nations security council diplomats convene in Geneva for international peace treaty negotiations">
-                🌍 World
+                World
               </button>
             </div>
           </div>
@@ -116,7 +118,7 @@
                     <option value="distilbert" id="distilbertOption" disabled>DistilBERT — Fine-tuned Transformer (Not Trained)</option>
                   </select>
                 </div>
-                <small class="form-hint" id="modelHint">⚡ Baseline model is loaded on disk (~0.05 ms CPU latency).</small>
+                <small class="form-hint" id="modelHint">Baseline model is loaded on disk (~0.05 ms CPU latency).</small>
               </div>
             </div>
 
@@ -137,19 +139,21 @@
         <div class="card result-card" id="resultCard">
           <div class="card-header">
             <h2 class="card-title">Prediction Result</h2>
-            <span class="latency-badge hidden" id="latencyBadge">⚡ 0.05 ms</span>
+            <span class="latency-badge hidden" id="latencyBadge">0.05 ms</span>
           </div>
 
           <!-- Empty State -->
           <div class="empty-state" id="predictEmptyState">
-            <div class="empty-icon">🎯</div>
+            <div class="empty-icon" aria-hidden="true">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/></svg>
+            </div>
             <h3>Ready for Classification</h3>
             <p>Type or paste a news headline above and click <strong>"Classify News"</strong> to see AI predictions and class probabilities.</p>
           </div>
 
           <!-- Error State -->
           <div class="alert alert-error hidden" id="predictErrorAlert">
-            <span class="alert-icon">⚠️</span>
+            <span class="alert-icon">!</span>
             <div class="alert-content" id="predictErrorMsg">Prediction failed.</div>
           </div>
 
@@ -157,7 +161,7 @@
           <div class="result-body hidden" id="predictResultBody">
             <!-- Low-Confidence Warning Banner -->
             <div class="alert alert-warning hidden" id="lowConfidenceAlert">
-              <span class="alert-icon">⚠️</span>
+              <span class="alert-icon">!</span>
               <div class="alert-content">
                 <strong>Uncertain Prediction</strong>
                 <p>The model has low confidence in this classification (&lt; 60%). The text may be ambiguous, multi-topic, or out-of-domain.</p>
@@ -169,12 +173,12 @@
               <div class="banner-top">
                 <span class="banner-subtitle">PREDICTED CATEGORY</span>
                 <div class="banner-actions">
-                  <button type="button" class="btn-copy" id="btnCopyPrediction" title="Copy prediction result">📋 Copy</button>
+                  <button type="button" class="btn-copy" id="btnCopyPrediction" title="Copy prediction result">Copy</button>
                   <span class="banner-badge" id="categoryBadge">Sports</span>
                 </div>
               </div>
               <div class="banner-main">
-                <div class="banner-icon" id="categoryIcon">⚽</div>
+                <div class="banner-icon" id="categoryIcon">SP</div>
                 <div class="banner-info">
                   <h3 class="banner-class" id="categoryLabel">SPORTS</h3>
                   <div class="banner-confidence">
@@ -201,7 +205,7 @@
             <!-- Explainable AI (XAI): Why This Prediction? -->
             <div class="explanation-section" id="explanationSection">
               <div class="explanation-header">
-                <h4 class="section-heading">💡 Why This Prediction?</h4>
+                <h4 class="section-heading">Why This Prediction?</h4>
                 <span class="xai-tag">Feature Contributions</span>
               </div>
               <p class="explanation-desc">
@@ -230,7 +234,7 @@
             <p class="card-subtitle">Upload a CSV file containing multiple headlines to classify them in bulk.</p>
           </div>
           <button type="button" class="btn btn-sm btn-outline" id="btnDownloadSampleCsv">
-            📥 Download Sample CSV
+            Download Sample CSV
           </button>
         </div>
 
@@ -238,7 +242,9 @@
         <div class="upload-dropzone" id="uploadDropzone">
           <input type="file" id="batchFileInput" accept=".csv" class="file-input-hidden">
           <div class="dropzone-content">
-            <div class="dropzone-icon">📁</div>
+            <div class="dropzone-icon" aria-hidden="true">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M12 12v9"/><path d="m16 16-4-4-4 4"/></svg>
+            </div>
             <h3 class="dropzone-title">Drag &amp; drop your CSV file here</h3>
             <p class="dropzone-sub">or <button type="button" class="btn-browse" id="btnBrowseFile">browse from your computer</button></p>
             <span class="dropzone-hint">Accepts standard .csv files with headline or text columns</span>
@@ -248,7 +254,9 @@
         <!-- File Config & Preview Bar -->
         <div class="file-config-bar hidden" id="fileConfigBar">
           <div class="file-info">
-            <span class="file-icon">📄</span>
+            <span class="file-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </span>
             <div>
               <strong class="file-name" id="batchFileName">news_data.csv</strong>
               <div class="file-meta" id="batchFileMeta">10 rows • 1.2 KB</div>
@@ -276,7 +284,7 @@
 
         <!-- Batch Error Alert -->
         <div class="alert alert-error hidden" id="batchErrorAlert">
-          <span class="alert-icon">⚠️</span>
+          <span class="alert-icon">!</span>
           <div class="alert-content" id="batchErrorMsg">Error running batch classification.</div>
         </div>
 
@@ -288,7 +296,7 @@
               <p class="results-sub" id="batchSummaryStats">Successfully classified 0 items</p>
             </div>
             <button type="button" class="btn btn-success" id="btnDownloadResultsCsv">
-              📥 Download Results CSV
+              Download Results CSV
             </button>
           </div>
 
@@ -384,28 +392,28 @@
               <tbody id="perClassTableBody">
                 <!-- Dynamically populated from reports/metrics.json -->
                 <tr>
-                  <td><span class="pill pill-world">🌍 World</span></td>
+                  <td><span class="pill pill-world">World</span></td>
                   <td>93.13%</td>
                   <td>90.58%</td>
                   <td><strong>0.9184</strong></td>
                   <td>1,900</td>
                 </tr>
                 <tr>
-                  <td><span class="pill pill-sports">⚽ Sports</span></td>
+                  <td><span class="pill pill-sports">Sports</span></td>
                   <td>95.24%</td>
                   <td>98.00%</td>
                   <td><strong>0.9660</strong></td>
                   <td>1,900</td>
                 </tr>
                 <tr>
-                  <td><span class="pill pill-business">📈 Business</span></td>
+                  <td><span class="pill pill-business">Business</span></td>
                   <td>89.05%</td>
                   <td>88.16%</td>
                   <td><strong>0.8860</strong></td>
                   <td>1,900</td>
                 </tr>
                 <tr>
-                  <td><span class="pill pill-scitech">🔬 Sci/Tech</span></td>
+                  <td><span class="pill pill-scitech">Sci/Tech</span></td>
                   <td>89.09%</td>
                   <td>89.84%</td>
                   <td><strong>0.8947</strong></td>
@@ -417,7 +425,7 @@
 
           <!-- Architecture & Specs Box -->
           <div class="specs-box">
-            <h4 class="specs-title">⚙️ Model Pipeline Specifications</h4>
+            <h4 class="specs-title">Model Pipeline Specifications</h4>
             <ul class="specs-list">
               <li><strong>Algorithm:</strong> Multinomial Logistic Regression (L2 penalty, C=1.0)</li>
               <li><strong>Feature Extraction:</strong> TF-IDF Vectorizer (1–2 n-grams, max 50,000 features, sublinear TF)</li>

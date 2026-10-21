@@ -15,7 +15,7 @@ from newsclf.predict import load_model, predict, predict_batch
 # Page configuration
 st.set_page_config(
     page_title="News Category Classifier",
-    page_icon="📰",
+    page_icon=None,
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -94,10 +94,10 @@ CLASS_COLORS = {
 }
 
 CLASS_ICONS = {
-    "World": "🌍",
-    "Sports": "⚽",
-    "Business": "📈",
-    "Sci/Tech": "🔬",
+    "World": "",
+    "Sports": "",
+    "Business": "",
+    "Sci/Tech": "",
 }
 
 # Example headlines for quick testing
@@ -122,7 +122,7 @@ EXAMPLES = [
 
 # Sidebar
 with st.sidebar:
-    st.markdown("### ⚙️ Model Settings")
+    st.markdown("### Model Settings")
 
     # F6: Model selector in UI
     model_choice = st.selectbox(
@@ -139,7 +139,7 @@ with st.sidebar:
     if "DistilBERT" in model_choice:
         if not transformer_available:
             st.warning(
-                "⚠️ Fine-tuned DistilBERT weights not found in `models/transformer_model`. "
+                "Fine-tuned DistilBERT weights not found in `models/transformer_model`. "
                 "Using baseline fallback until training is run (`python -m newsclf.train_transformer`)."
             )
             active_model_path = os.path.join("models", "baseline_model.joblib")
@@ -149,34 +149,34 @@ with st.sidebar:
         active_model_path = os.path.join("models", "baseline_model.joblib")
 
     st.markdown("---")
-    st.markdown("### 📊 Baseline Benchmark")
+    st.markdown("### Baseline Benchmark")
     st.markdown("- **Test Accuracy:** `91.64%`")
     st.markdown("- **Macro F1:** `0.9163`")
     st.markdown("- **Inference Latency:** `< 1 ms`")
     st.markdown("- **Dataset:** AG News (120k train, 7.6k test)")
 
     st.markdown("---")
-    st.markdown("### 🏷️ Target Categories")
+    st.markdown("### Target Categories")
     for cat in LABEL_NAMES:
-        st.markdown(f"{CLASS_ICONS.get(cat, '•')} **{cat}**")
+        st.markdown(f"• **{cat}**")
 
 
 # Main Page Header
-st.markdown("<h1 class='main-title'>📰 News Category Classifier</h1>", unsafe_allow_html=True)
+st.markdown("<h1 class='main-title'>News Category Classifier</h1>", unsafe_allow_html=True)
 st.markdown(
     "<p class='sub-title'>Predict categories for news headlines and articles with calibrated confidence scores across World, Sports, Business, and Sci/Tech.</p>",
     unsafe_allow_html=True,
 )
 
-tab1, tab2, tab3 = st.tabs(["⚡ Single Headline / Text", "📁 Batch CSV Prediction", "📈 Model Reports & Metrics"])
+tab1, tab2, tab3 = st.tabs(["Single Headline / Text", "Batch CSV Prediction", "Model Reports & Metrics"])
 
 with tab1:
     col_input, col_examples = st.columns([2, 1])
 
     with col_examples:
-        st.markdown("##### 💡 Quick Example Presets")
+        st.markdown("##### Quick Example Presets")
         for i, ex in enumerate(EXAMPLES):
-            if st.button(f"{CLASS_ICONS[ex['category']]} {ex['category']}", key=f"ex_{i}", use_container_width=True):
+            if st.button(ex["category"], key=f"ex_{i}", use_container_width=True):
                 st.session_state["news_input_text"] = ex["text"]
 
     with col_input:
@@ -187,7 +187,7 @@ with tab1:
             key="input_area",
             placeholder="Type or paste a news headline here...",
         )
-        predict_btn = st.button("🚀 Predict Category", type="primary", use_container_width=True)
+        predict_btn = st.button("Predict Category", type="primary", use_container_width=True)
 
     if predict_btn or user_text:
         if not user_text.strip():
@@ -211,7 +211,7 @@ with tab1:
                 # F7: Low-confidence warning in UI (below 0.6)
                 if conf < 0.60:
                     st.warning(
-                        f"⚠️ **Uncertain prediction** (Confidence {conf * 100:.1f}% is below 60%). "
+                        f"**Uncertain prediction** (Confidence {conf * 100:.1f}% is below 60%). "
                         "The input text may be ambiguous, multi-topic, or out-of-domain."
                     )
 
@@ -219,13 +219,10 @@ with tab1:
 
                 with res_col1:
                     st.markdown("#### Prediction Result")
-                    badge_class = f"badge-{label.lower().replace('/', '')}"
-                    icon = CLASS_ICONS.get(label, "🏷️")
                     
                     st.markdown(
                         f"""
                         <div style="padding: 20px; border-radius: 14px; background: #F8FAFC; border: 1px solid #E2E8F0; text-align: center;">
-                            <div style="font-size: 2.2rem; margin-bottom: 8px;">{icon}</div>
                             <div style="font-size: 1.5rem; font-weight: 800; color: #0F172A; margin-bottom: 6px;">{label}</div>
                             <div style="font-size: 1.1rem; color: #475569; margin-bottom: 12px;">Confidence: <b>{conf * 100:.1f}%</b></div>
                             <div style="font-size: 0.85rem; color: #94A3B8;">Inference latency: {latency_ms:.2f} ms</div>
@@ -264,7 +261,7 @@ with tab1:
 
 with tab2:
     # F9: Batch prediction from a CSV upload
-    st.markdown("### 📁 Batch Prediction from CSV")
+    st.markdown("### Batch Prediction from CSV")
     st.markdown("Upload a CSV containing headlines or articles to classify them in bulk.")
 
     uploaded_file = st.file_uploader("Upload CSV file", type=["csv"])
@@ -280,7 +277,7 @@ with tab2:
                 options=text_columns or list(batch_df.columns),
             )
 
-            if st.button("⚡ Run Batch Classification", type="primary"):
+            if st.button("Run Batch Classification", type="primary"):
                 with st.spinner("Processing batch predictions..."):
                     texts = batch_df[chosen_col].astype(str).tolist()
                     preds = predict_batch(texts, model_path=active_model_path)
@@ -294,7 +291,7 @@ with tab2:
                 csv_buffer = io.StringIO()
                 batch_df.to_csv(csv_buffer, index=False)
                 st.download_button(
-                    label="📥 Download Classified CSV",
+                    label="Download Classified CSV",
                     data=csv_buffer.getvalue(),
                     file_name="classified_news.csv",
                     mime="text/csv",
@@ -303,7 +300,7 @@ with tab2:
             st.error(f"Error processing CSV: {e}")
 
 with tab3:
-    st.markdown("### 📈 Evaluation & Performance Reports")
+    st.markdown("### Evaluation & Performance Reports")
     cm_img_path = os.path.join("reports", "confusion_matrix.png")
     metrics_json_path = os.path.join("reports", "metrics.json")
 
