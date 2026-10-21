@@ -1,0 +1,11 @@
+article_id,category_hint,content,reading_time_mins
+101,physics,"Quantum researchers achieve fault-tolerant logical qubit operations using neutral-atom laser architecture",4
+102,astronomy,"European Space Agency Euclid observatory releases first full-color mosaic mapping cosmic dark matter web",3
+103,ai,"Anthropic publishes mechanistic interpretability analysis exposing internal circuitry of frontier neural models",5
+104,biotech,"CRISPR gene-editing therapy receives regulatory milestone approval for hereditary blood disorder treatment",4
+105,space,"NASA Artemis program tests core stage propellant loading for uncrewed lunar circumlunar trajectory",3
+106,cybersecurity,"Major zero-day vulnerability in open-source compression library neutralised by automated developer security tool",2
+107,neuroscience,"Brain-computer interface enables paralyzed patient to control computer cursor and play digital games via neural telemetry",5
+108,semiconductors,"Engineers demonstrate two-nanometer gate-all-around transistor prototype with improved thermal efficiency",3
+109,climate_science,"Atmospheric scientists utilize high-altitude drone network to measure aerosol concentrations over Atlantic Ocean",4
+110,robotics,"Humanoid robot system demonstrates autonomous warehouse parcel sortation utilizing multi-modal vision models",3

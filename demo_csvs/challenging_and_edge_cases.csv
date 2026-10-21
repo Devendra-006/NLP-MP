@@ -1,0 +1,13 @@
+id,test_type,headline
+1,short,"Match delayed"
+2,short,"Markets rally"
+3,short,"Peace talks begin"
+4,short,"New chip announced"
+5,sports_business_crossover,"Billionaire consortium completes four billion dollar leveraged buyout of premier football club franchise"
+6,tech_business_crossover,"Semiconductor startup secures two hundred million dollar series B funding from sovereign wealth fund"
+7,world_tech_crossover,"International cybersecurity agency investigates suspected state-sponsored intrusion against government elections registry"
+8,science_world_crossover,"United Nations environmental program convenes emergency treaty delegation on melting polar ice caps"
+9,ambiguous,"The strike was called off yesterday afternoon following agreement"
+10,ambiguous,"Officials confirm new record high recorded during summer session"
+11,out_of_domain,"Delicious homemade sourdough bread recipe with garlic butter and rosemary crust"
+12,out_of_domain,"How to train your golden retriever puppy to sit and stay during daily walks"
