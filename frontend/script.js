@@ -4,10 +4,12 @@
 
 document.addEventListener("DOMContentLoaded", () => {
   // Determine Flask API URL
-  const API_BASE = (window.location.protocol === "http:" || window.location.protocol === "https:")
-    && window.location.port === "5000"
+  const isServedFromBackend = (window.location.protocol === "http:" || window.location.protocol === "https:")
+    && (window.location.pathname.includes("/app") || window.location.port === "5050" || window.location.port === "5000");
+
+  const API_BASE = isServedFromBackend
     ? window.location.origin
-    : "http://127.0.0.1:5000";
+    : (sessionStorage.getItem("API_BASE") || "http://127.0.0.1:5050");
 
   // Category Configuration
   const CATEGORY_META = {

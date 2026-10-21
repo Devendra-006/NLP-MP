@@ -74,20 +74,34 @@ def create_app() -> Flask:
 app = create_app()
 
 
+def is_port_in_use(port: int, host: str = "127.0.0.1") -> bool:
+    """Check if a network port is already in use."""
+    import socket
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        return s.connect_ex((host, port)) == 0
+
+
 def main():
     """Run Flask development or production server."""
-    port = int(os.environ.get("PORT", 5000))
     host = os.environ.get("HOST", "127.0.0.1")
+    port_env = os.environ.get("PORT")
+    if port_env:
+        port = int(port_env)
+    else:
+        port = 5050 if is_port_in_use(5000, host) else 5000
+
     use_prod = os.environ.get("FLASK_ENV") == "production" or "--prod" in sys.argv
     if use_prod:
         try:
             from waitress import serve
             print(f"Starting production Waitress WSGI server on http://{host}:{port}")
+            print(f"Web Dashboard accessible at: http://{host}:{port}/app/")
             serve(app, host=host, port=port)
             return
         except ImportError:
             pass
     print(f"Starting News Category Classifier Flask API on http://{host}:{port}")
+    print(f"Web Dashboard accessible at: http://{host}:{port}/app/")
     app.run(host=host, port=port, debug=False if use_prod else True)
 
 
